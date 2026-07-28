@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="The Marketer's Calendar for The Upper House — hotel, luxury, Hong Kong & Korea moments every 5-star marketer should know">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏙️</text></svg>">
+<title>THE UPPER HOUSE — The Marketer's Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Amiko:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Black & white + Upper House green point (#468254 sampled from upperhouse.com, 2026-07-28)
+     Fonts: Belleza + Amiko — the faces used on upperhouse.com */
+  :root{
+    --bg:#FBFBFA; --card:#FFFFFF; --ink:#141414; --sub:#6B6B6B;
+    --line:rgba(20,20,20,.14); --line-soft:rgba(20,20,20,.07);
+    --point:#3E7449; --point-soft:rgba(62,116,73,.08);
+    --live:#3E7449; --live-bg:rgba(62,116,73,.1);
+    --dim:.45; --shadow:0 1px 2px rgba(20,20,20,.05),0 8px 28px rgba(20,20,20,.07);
+    --chip-on:#FFFFFF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0E0E0E; --card:#181818; --ink:#F2F0EC; --sub:#9C9C9C;
+      --line:rgba(242,240,236,.16); --line-soft:rgba(242,240,236,.07);
+      --point:#7FBF8C; --point-soft:rgba(127,191,140,.12);
+      --live:#7FBF8C; --live-bg:rgba(127,191,140,.13);
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 32px rgba(0,0,0,.35);
+      --chip-on:#141414;
+    }
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Amiko","Helvetica Neue",Arial,sans-serif;
+    font-size:15px; line-height:1.66; -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:"Belleza","Amiko",Georgia,sans-serif; letter-spacing:.02em}
+  .mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-variant-numeric:tabular-nums}
+
+  .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
+
+  header{padding:52px 0 30px; border-bottom:1px solid var(--ink)}
+  .eyebrow{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap;
+    font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--sub); margin-bottom:16px}
+  .eyebrow b{color:var(--point); font-weight:700}
+  h1{margin:0; font-weight:400; font-size:clamp(36px,6.6vw,64px); line-height:1.08; text-wrap:balance}
+  h1 .en{display:block; font-family:"Amiko",sans-serif; font-weight:600; font-size:.28em; letter-spacing:.22em; color:var(--sub); text-transform:uppercase; margin-bottom:12px}
+  .lede{margin:18px 0 0; max-width:660px; color:var(--sub); font-size:15px}
+
+  .now{margin:34px 0 0; border:1px solid var(--point); background:var(--point-soft); border-radius:2px; padding:22px 24px}
+  .now-tag{display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--point); font-weight:700; margin-bottom:10px}
+  .now-tag .pulse{width:8px;height:8px;border-radius:50%;background:var(--point);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  @media (prefers-reduced-motion: reduce){.now-tag .pulse{animation:none}}
+  .now h2{margin:0 0 6px; font-size:clamp(20px,3.2vw,28px); font-weight:400; line-height:1.3}
+  .now p{margin:0; color:var(--sub); font-size:14px; max-width:720px}
+  .now ul{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+  .now li{display:flex; gap:10px; align-items:baseline; font-size:14px}
+  .now li .d{flex:0 0 auto; font-size:12px; color:var(--point); font-weight:700; min-width:52px}
+
+  .radar{margin:26px 0 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px}
+  .radar-card{background:var(--card); border:1px solid var(--line-soft); border-radius:2px; padding:14px 16px; box-shadow:var(--shadow); border-top:2px solid var(--point)}
+  .radar-card .dd{font-size:11px; letter-spacing:.12em; font-weight:700; color:var(--point); text-transform:uppercase}
+  .radar-card .t{font-size:14.5px; font-weight:600; margin:3px 0 1px; line-height:1.4}
+  .radar-card .m{font-size:12.5px; color:var(--sub)}
+
+  .filters{position:sticky; top:0; z-index:5; background:var(--bg); padding:16px 0 14px; margin-top:40px;
+    border-bottom:1px solid var(--line-soft); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .chip{border:1px solid var(--line); background:transparent; color:var(--sub); border-radius:999px;
+    padding:5px 14px 6px; font-size:12.5px; font-family:inherit; cursor:pointer; letter-spacing:.02em; transition:all .15s}
+  .chip .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--point); margin-right:7px; vertical-align:1px}
+  .chip.on{background:var(--ink); border-color:var(--ink); color:var(--chip-on)}
+  .chip:focus-visible{outline:2px solid var(--point); outline-offset:2px}
+
+  .month{padding:44px 0 8px}
+  .month-head{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--ink); padding-bottom:12px; margin-bottom:22px}
+  .month-num{font-size:clamp(38px,5.6vw,54px); line-height:1; font-weight:400; color:var(--point)}
+  .month-meta .y{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--sub)}
+  .month-meta .theme{font-size:15px; font-weight:700; margin-top:2px}
+  .month-meta .theme .super{color:var(--point)}
+  .month-note{margin-left:auto; font-size:12.5px; color:var(--sub); max-width:380px; text-align:right}
+  @media (max-width:640px){.month-note{margin-left:0; text-align:left}}
+
+  .events{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px}
+  .empty-month{grid-column:1/-1; border:1px dashed var(--line); border-radius:2px; padding:18px 20px; color:var(--sub); font-size:13px; letter-spacing:.02em}
+  .ev{background:var(--card); border:1px solid var(--line-soft); border-left:3px solid var(--point); border-radius:2px;
+    padding:16px 18px 15px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px}
+  .ev.past{opacity:var(--dim)}
+  .ev.hidden{display:none}
+  .ev-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+  .ev-cat{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--point)}
+  .ev-dday{font-size:11px; font-weight:700; padding:2px 9px 3px; border-radius:999px; border:1px solid var(--line); color:var(--sub); white-space:nowrap}
+  .ev-dday.live{background:var(--live-bg); border-color:transparent; color:var(--live)}
+  .ev-dday.soon{background:var(--point-soft); border-color:transparent; color:var(--point)}
+  .ev h3{margin:0; font-size:17px; font-weight:600; line-height:1.4}
+  .ev .when{font-size:12.5px; color:var(--sub)}
+  .ev .when b{color:var(--ink); font-weight:600}
+  .ev .approx{font-size:10.5px; color:var(--sub); border:1px solid var(--line); border-radius:3px; padding:0 5px; margin-left:6px; letter-spacing:.05em}
+  .ev .angles{border-top:1px dashed var(--line); margin-top:4px; padding-top:9px; display:flex; flex-direction:column; gap:6px}
+  .ev .angle{font-size:12.8px; color:var(--sub); line-height:1.6}
+  .ev .angle b{font-weight:700; color:var(--ink); font-size:11px; letter-spacing:.1em; margin-right:5px}
+  .ev .angle.prep b{color:var(--point)}
+
+  .playbook{margin-top:70px; border-top:1px solid var(--ink); padding-top:34px}
+  .pb-eyebrow{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--point); font-weight:700}
+  .playbook h2{margin:8px 0 6px; font-weight:400; font-size:clamp(26px,4vw,38px); line-height:1.15}
+  .playbook > p{color:var(--sub); max-width:660px; margin:0 0 26px; font-size:14.5px}
+  .pb-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr)); gap:12px}
+  .pb{background:var(--card); border:1px solid var(--line-soft); border-top:2px solid var(--point); border-radius:2px; padding:18px; box-shadow:var(--shadow)}
+  .pb .d{font-size:13px; color:var(--point); font-weight:700; letter-spacing:.08em}
+  .pb .t{font-weight:700; font-size:14.5px; margin:6px 0 4px}
+  .pb p{margin:0; font-size:13px; color:var(--sub); line-height:1.6}
+
+  footer{margin-top:60px; padding-top:18px; border-top:1px solid var(--line-soft); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    font-size:11.5px; color:var(--sub); letter-spacing:.06em}
+  footer .brand{color:var(--point); font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">
+      <span><b>THE UPPER HOUSE</b>&nbsp; HOSPITALITY INTELLIGENCE</span>
+      <span id="today-label" class="mono"></span>
+    </div>
+    <h1 class="serif"><span class="en">Hong Kong · Luxury · Korea</span>The Marketer's Calendar</h1>
+    <p class="lede" id="lede">The moments a 5-star marketer in Hong Kong should never be surprised by — hotel &amp; dining awards, luxury and art weeks, Hong Kong seasons, and the Korean travel calendar that shapes your guest mix. Each event carries a marketing angle and a prep cue.</p>
+
+    <div class="now">
+      <div class="now-tag"><span class="pulse"></span>This Week's Briefing</div>
+      <h2 class="serif" id="now-title"></h2>
+      <p id="now-sub"></p>
+      <ul id="now-list"></ul>
+    </div>
+
+    <div class="radar" id="radar"></div>
+  </header>
+
+  <nav class="filters" id="filters" aria-label="Category filter"></nav>
+
+  <main id="months"></main>
+
+  <section class="playbook">
+    <div class="pb-eyebrow">Operating Rhythm</div>
+    <h2 class="serif">The Season Campaign Cadence</h2>
+    <p>Hotel marketing is a lead-time game. Packages should be locked two months out, and content should go live the moment booking opens.</p>
+    <div class="pb-grid">
+      <div class="pb"><div class="d">D-60</div><div class="t">Lock the package</div><p>Confirm season-target packages, rate and inventory strategy, and alignment across Rooms, F&amp;B and Events.</p></div>
+      <div class="pb"><div class="d">D-30</div><div class="t">Open for sale</div><p>Launch on brand.com, OTAs and member channels together. Deadline for press, partner and influencer collaborations.</p></div>
+      <div class="pb"><div class="d">D-14</div><div class="t">Content live</div><p>Season visuals and detail content published; search and social ads on. First read on pickup, adjust promotion.</p></div>
+      <div class="pb"><div class="d">D-7</div><div class="t">Ops briefing</div><p>Brief the floor — concierge, in-room and F&amp;B messaging aligned. Decide last-minute boosts on remaining inventory.</p></div>
+      <div class="pb"><div class="d">D+7</div><div class="t">Recap &amp; learn</div><p>Review ADR, occupancy and F&amp;B covers; respond to reviews; publish the recap and feed next season's plan.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Prepared by <span class="brand">1%CLUB</span> for THE UPPER HOUSE — Hospitality Intelligence</span>
+    <span>Dates follow official announcements · <span class="mono">±</span> = expected window · as of <span class="mono" id="foot-date"></span></span>
+  </footer>
+</div>
+
+<script>
+const CATS = {
+  hk:{label:'Hong Kong'},
+  korea:{label:'Korea Moments'},
+  awards:{label:'Hotels & Dining Awards'},
+  luxury:{label:'Luxury & Art'},
+  seasonal:{label:'Seasons & Gifting'},
+  trade:{label:'Travel Trade'},
+};
+
+/* approx:true = not officially announced yet; expected window based on prior editions */
+const EVENTS = [
+  // ── 2026.07–08 ──
+  {s:'2026-07-18', e:'2026-08-16', cat:'korea', title:'Korean Summer Holiday Peak', place:'Korea → Hong Kong',
+   angle:'Korea\'s outbound peak — short-haul city breaks favour Hong Kong. Korean-language offers and F&B storytelling convert well in this window.',
+   prep:'Korean-market summer campaign should already be live; brief Korean media/creator partners for autumn now.'},
+  {s:'2026-08-17', e:'2026-08-20', cat:'trade', title:'Virtuoso Travel Week', place:'Las Vegas', approx:true,
+   angle:'The luxury travel network\'s annual marketplace — key for high-value FIT pipelines.',
+   prep:'Refresh consortia amenities and suite storytelling before appointments.'},
+  {s:'2026-08-24', e:'2026-09-25', cat:'seasonal', title:'Mooncake Season — Pre-orders', place:'Hong Kong',
+   angle:'Hotel mooncake gifting is a signature F&B revenue moment; corporate gifting decisions happen weeks ahead of the festival.',
+   prep:'Corporate order push and packaging content by late August.'},
+
+  // ── 2026.09 ──
+  {s:'2026-09-02', e:'2026-09-06', cat:'korea', title:'Seoul Art Week — Kiaf × Frieze Seoul', place:'Seoul',
+   angle:'The collector circuit connects Seoul and Hong Kong — relationships made here return for Art Basel HK in March.',
+   prep:'Host or join a Seoul-side moment; capture collector contacts for March.'},
+  {s:'2026-09-14', e:'2026-09-20', cat:'hk', title:'Jewellery & Gem WORLD Hong Kong', place:'AWE · HKCEC',
+   angle:'The world\'s largest jewellery fair fills the city — trade guests with long stays and entertaining budgets.',
+   prep:'Trade-rate offers and private-dining packages for exhibitors.'},
+  {s:'2026-09-14', e:'2026-09-18', cat:'awards', title:"The World's 50 Best Hotels 2026", place:'Paris', approx:true,
+   angle:'The industry\'s annual ranking week — Asia\'s standings make regional headlines and reset comparison sets.',
+   prep:'Same-day analysis for leadership; ready congratulatory/positioning lines.'},
+  {s:'2026-09-24', e:'2026-09-26', cat:'korea', title:'Chuseok — Korean Long Weekend', place:'Korea → Hong Kong',
+   angle:'Korean thanksgiving long weekend = outbound spike. A well-timed Korean-market flash offer captures late bookers.',
+   prep:'Korean OTA and social placements two weeks out.'},
+  {s:'2026-09-25', e:'2026-09-26', cat:'seasonal', title:'Mid-Autumn Festival', place:'Hong Kong (public holiday 9/26)',
+   angle:'Lantern moments, mooncake crescendo, family staycations — the city\'s most photogenic festival.',
+   prep:'—'},
+
+  // ── 2026.10 ──
+  {s:'2026-10-01', e:'2026-10-07', cat:'seasonal', title:'China Golden Week', place:'Mainland → Hong Kong',
+   angle:'Mainland travel peak — premium FIT arrivals, retail-led itineraries, strong suite demand.',
+   prep:'Mainland channels (WeChat·Xiaohongshu) live by mid-September.'},
+  {s:'2026-10-03', e:'2026-10-12', cat:'luxury', title:'Autumn Auction Season (Sotheby\'s · Christie\'s HK)', place:'Hong Kong', approx:true,
+   angle:'Collectors and specialists in town — quiet, high-value stays and private dining.',
+   prep:'—'},
+  {s:'2026-10-09', e:'2026-10-11', cat:'luxury', title:'F1 Singapore Grand Prix', place:'Singapore',
+   angle:'The region\'s luxury sport weekend — affluent HK/Korea travellers route through; watch the halo effect on regional demand.',
+   prep:'—'},
+  {s:'2026-10-22', e:'2026-10-25', cat:'hk', title:'Hong Kong Wine & Dine Festival', place:'Central Harbourfront', approx:true,
+   angle:'The city\'s flagship epicurean festival — align bar and restaurant programming with the citywide F&B spotlight.',
+   prep:'Festival-week wine dinners announced early October.'},
+
+  // ── 2026.11 ──
+  {s:'2026-11-10', e:'2026-11-13', cat:'hk', title:'Cosmoprof Asia', place:'HKCEC · AWE',
+   angle:'Asia\'s largest beauty trade show — another citywide occupancy driver with Korean exhibitor contingents.',
+   prep:'—'},
+  {s:'2026-11-11', e:'2026-11-11', cat:'seasonal', title:"Singles' Day (11.11)", place:'Greater China',
+   angle:'The world\'s biggest shopping day — flash-sale mechanics work for gift cards and staycation vouchers.',
+   prep:'—'},
+  {s:'2026-11-19', e:'2026-11-19', cat:'korea', title:'Korea CSAT (Suneung)', place:'Korea',
+   angle:'Post-exam reward travel season opens for Korean families — December HK trips book in this window.',
+   prep:'Korean-market December campaign live before exam day.'},
+  {s:'2026-11-30', e:'2026-12-03', cat:'trade', title:'ILTM Cannes', place:'Cannes',
+   angle:'The pinnacle of luxury travel trade — annual meetings with top producers.',
+   prep:'Appointment diary and new sales kit locked by mid-November.'},
+
+  // ── 2026.12 ──
+  {s:'2026-12-01', e:'2026-12-26', cat:'seasonal', title:'Hong Kong WinterFest', place:'Hong Kong',
+   angle:'Harbour lights, festive afternoon tea, staycations — the hotel is the destination this month.',
+   prep:'Peak-night rate and inventory strategy locked in November.'},
+  {s:'2026-12-04', e:'2026-12-06', cat:'hk', title:'Clockenflap', place:'Central Harbourfront', approx:true,
+   angle:'The city\'s music festival weekend — younger affluent crowd, bar programming opportunity.',
+   prep:'—'},
+  {s:'2026-12-31', e:'2026-12-31', cat:'seasonal', title:'New Year\'s Eve Countdown', place:'Victoria Harbour',
+   angle:'Fireworks-view rooms and countdown dinners — the year\'s single highest-demand night.',
+   prep:'—'},
+
+  // ── 2027.01–02 ──
+  {s:'2027-01-08', e:'2027-02-05', cat:'seasonal', title:'CNY Gifting & Puddings Season', place:'Hong Kong',
+   angle:'New Year puddings and corporate gifting lead-up — F&B\'s first revenue moment of the year.',
+   prep:'Gifting catalogue out early January.'},
+  {s:'2027-02-06', e:'2027-02-09', cat:'seasonal', title:'Chinese New Year (Year of the Goat)', place:'Hong Kong (holidays 2/6·8·9)',
+   angle:'The city\'s biggest festive season — parade, harbour fireworks, family staycations, lai see rituals.',
+   prep:'CNY programme locked in December; mainland & Korean CNY overlap doubles the audience.'},
+  {s:'2027-02-06', e:'2027-02-09', cat:'korea', title:'Seollal — Korean Long Weekend', place:'Korea → Hong Kong',
+   angle:'Korean Lunar New Year mirrors HK\'s — a four-day outbound window aimed at short-haul city breaks.',
+   prep:'Korean-market CNY offer live by mid-January.'},
+
+  // ── 2027.03 ──
+  {s:'2027-03-01', e:'2027-03-31', cat:'hk', title:'Hong Kong Arts Month', place:'Citywide',
+   angle:'A month of citywide arts programming building to Art Basel — position the hotel inside the cultural itinerary.',
+   prep:'—'},
+  {s:'2027-03-15', e:'2027-03-31', cat:'awards', title:'MICHELIN Guide Hong Kong & Macau 2027', place:'Hong Kong · Macau', approx:true,
+   angle:'The dining scorecard of the city — stars won or held demand same-day storytelling.',
+   prep:'Three response scenarios (gain/hold/loss) drafted in advance.'},
+  {s:'2027-03-22', e:'2027-03-31', cat:'awards', title:"Asia's 50 Best Restaurants 2027", place:'Asia', approx:true,
+   angle:'Asia\'s dining ranking — chef collaborations and four-hands dinners flow from this list.',
+   prep:'—'},
+  {s:'2027-03-25', e:'2027-03-27', cat:'luxury', title:'Art Basel Hong Kong 2027', place:'HKCEC',
+   angle:'The city\'s defining luxury week — collectors, galleries and maisons converge; full-house with the year\'s highest-value guest mix. Seoul relationships made in September return here.',
+   prep:'Art-week suite packages and VIP partnerships locked by late February (D-30).'},
+  {s:'2027-03-26', e:'2027-03-29', cat:'seasonal', title:'Easter Long Weekend', place:'Hong Kong', approx:true,
+   angle:'Family staycation window right after Art Basel — two very different demand waves in one week.',
+   prep:'—'},
+
+  // ── 2027.04–05 ──
+  {s:'2027-04-09', e:'2027-04-11', cat:'hk', title:'Hong Kong Sevens', place:'Kai Tak Stadium', approx:true,
+   angle:'The city\'s biggest sporting party — corporate hospitality and international fan influx.',
+   prep:'Corporate box-adjacent packages pitched in February.'},
+  {s:'2027-05-01', e:'2027-05-09', cat:'korea', title:'Korean Family Week (Children\'s Day · Parents\' Day)', place:'Korea → Hong Kong',
+   angle:'Korea\'s family-gifting season — multigenerational trips and celebration dining.',
+   prep:'—'},
+  {s:'2027-05-08', e:'2027-05-17', cat:'luxury', title:'Spring Auction Season (HK)', place:'Hong Kong', approx:true,
+   angle:'Spring sales bring collectors back to the city.',
+   prep:'—'},
+
+  // ── 2027.06 ──
+  {s:'2027-06-09', e:'2027-06-09', cat:'hk', title:'Dragon Boat Festival (Tuen Ng)', place:'Hong Kong', approx:true,
+   angle:'Races and rice dumplings — the unofficial start of Hong Kong summer.',
+   prep:'—'},
+  {s:'2027-06-21', e:'2027-06-24', cat:'trade', title:'ILTM Asia Pacific', place:'Singapore', approx:true,
+   angle:'The region\'s luxury travel marketplace — core channel for intra-Asia demand.',
+   prep:'—'},
+
+  // ── 2027.07–08 ──
+  {s:'2027-07-17', e:'2027-08-15', cat:'korea', title:'Korean Summer Holiday Peak', place:'Korea → Hong Kong',
+   angle:'Korea\'s outbound peak returns — the year\'s largest Korean leisure window.',
+   prep:'Korean summer campaign live by early June.'},
+  {s:'2027-08-16', e:'2027-08-19', cat:'trade', title:'Virtuoso Travel Week', place:'Las Vegas', approx:true,
+   angle:'Annual luxury travel marketplace.',
+   prep:'—'},
+  {s:'2027-08-16', e:'2027-09-15', cat:'seasonal', title:'Mooncake Season — Pre-orders', place:'Hong Kong',
+   angle:'Signature gifting revenue moment ahead of Mid-Autumn (9/15).',
+   prep:'Corporate push from mid-August.'},
+
+  // ── 2027.09 ──
+  {s:'2027-09-01', e:'2027-09-05', cat:'korea', title:'Seoul Art Week — Kiaf × Frieze Seoul 2027', place:'Seoul', approx:true,
+   angle:'The Seoul–Hong Kong collector circuit, round two.',
+   prep:'—'},
+  {s:'2027-09-13', e:'2027-09-19', cat:'hk', title:'Jewellery & Gem WORLD Hong Kong', place:'Hong Kong', approx:true,
+   angle:'The world\'s largest jewellery fair returns.',
+   prep:'—'},
+  {s:'2027-09-14', e:'2027-09-16', cat:'korea', title:'Chuseok — Korean Long Weekend', place:'Korea → Hong Kong',
+   angle:'Korean holiday outbound window (Chuseok 9/15).',
+   prep:'—'},
+  {s:'2027-09-15', e:'2027-09-16', cat:'seasonal', title:'Mid-Autumn Festival', place:'Hong Kong',
+   angle:'Lanterns, mooncakes and family staycations — overlapping with Korean Chuseok for a double demand wave.',
+   prep:'—'},
+  {s:'2027-09-20', e:'2027-10-10', cat:'awards', title:"The World's 50 Best Hotels 2027", place:'TBA', approx:true,
+   angle:'The industry ranking week returns.',
+   prep:'—'},
+
+  // ── 2027.10–12 ──
+  {s:'2027-10-01', e:'2027-10-07', cat:'seasonal', title:'China Golden Week', place:'Mainland → Hong Kong',
+   angle:'Mainland travel peak.',
+   prep:'Mainland channels live by mid-September.'},
+  {s:'2027-10-21', e:'2027-10-24', cat:'hk', title:'Hong Kong Wine & Dine Festival', place:'Hong Kong', approx:true,
+   angle:'Citywide epicurean spotlight.',
+   prep:'—'},
+  {s:'2027-11-09', e:'2027-11-12', cat:'hk', title:'Cosmoprof Asia', place:'Hong Kong', approx:true,
+   angle:'Asia\'s beauty trade week.',
+   prep:'—'},
+  {s:'2027-11-29', e:'2027-12-02', cat:'trade', title:'ILTM Cannes', place:'Cannes', approx:true,
+   angle:'Luxury travel trade pinnacle.',
+   prep:'—'},
+  {s:'2027-12-01', e:'2027-12-26', cat:'seasonal', title:'Hong Kong WinterFest', place:'Hong Kong',
+   angle:'Festive season — the hotel as the destination.',
+   prep:'Peak-night strategy locked in November.'},
+  {s:'2027-12-31', e:'2027-12-31', cat:'seasonal', title:'New Year\'s Eve Countdown', place:'Victoria Harbour',
+   angle:'The year\'s highest-demand night.',
+   prep:'—'},
+];
+
+const MONTH_THEMES = {
+  '2026-07':{theme:'Korean Summer Peak', note:'Korea\'s outbound wave is live — and mooncake pre-orders open next month.'},
+  '2026-08':{theme:'Mooncake Pre-orders & Trade Season'},
+  '2026-09':{theme:'Super Month — Fairs × Festivals × Rankings', super:true, note:'JGW, 50 Best Hotels, Chuseok and Mid-Autumn stack into one month.'},
+  '2026-10':{theme:'Golden Week → Wine & Dine', super:true},
+  '2026-11':{theme:'Trade Season & Korean Reward Travel'},
+  '2026-12':{theme:'WinterFest — Peak Season', super:true},
+  '2027-01':{theme:'CNY Lead-up'},
+  '2027-02':{theme:'Chinese New Year × Seollal', super:true, note:'HK and Korean lunar holidays overlap — a double demand wave.'},
+  '2027-03':{theme:'Arts Month → Art Basel — The Defining Week', super:true},
+  '2027-04':{theme:'Sevens & Spring'},
+  '2027-05':{theme:'Korean Family Week & Auctions'},
+  '2027-06':{theme:'Summer Opens'},
+  '2027-07':{theme:'Korean Summer Peak'},
+  '2027-08':{theme:'Mooncake Pre-orders'},
+  '2027-09':{theme:'Super Month — Fairs × Festivals', super:true},
+  '2027-10':{theme:'Golden Week → Wine & Dine'},
+  '2027-11':{theme:'Trade Season'},
+  '2027-12':{theme:'WinterFest — Peak Season', super:true},
+};
+
+const $=s=>document.querySelector(s);
+const fmt=(d)=>`${d.getMonth()+1}/${d.getDate()}`;
+const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c);};
+const today=new Date(); today.setHours(0,0,0,0);
+const DAY=86400000;
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+/* Rolling window: 1st of this month → Dec 31 next year */
+const winStart=new Date(today.getFullYear(), today.getMonth(), 1);
+const winEnd=new Date(today.getFullYear()+1, 11, 31);
+const visible=EVENTS.filter(ev=>parse(ev.e)>=winStart && parse(ev.s)<=winEnd);
+
+const dateLabel=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+$('#today-label').textContent = `as of ${dateLabel}`;
+$('#foot-date').textContent = dateLabel;
+
+function status(ev){
+  const s=parse(ev.s), e=parse(ev.e);
+  if(today>e) return {k:'past'};
+  if(today>=s) return {k:'live', label:'LIVE'};
+  const d=Math.round((s-today)/DAY);
+  return {k:d<=30?'soon':'future', label:`D-${d}`, d};
+}
+
+(function(){
+  const active=visible.map(ev=>({ev,st:status(ev)})).filter(x=>x.st.k==='live'||(x.st.k!=='past'&&x.st.d<=10));
+  const list=$('#now-list');
+  if(active.length===0){
+    $('#now-title').textContent='A quiet week — time to prepare';
+    $('#now-sub').textContent='No major events imminent this week. Use the radar below to get ahead of what\'s coming.';
+  }else{
+    const live=active.filter(x=>x.st.k==='live').length;
+    $('#now-title').textContent = live>0 ? 'In season right now' : 'This week, get ready for';
+    $('#now-sub').textContent='Live now or starting within 10 days. Check sales, content and ops readiness.';
+    active.sort((a,b)=>parse(a.ev.s)-parse(b.ev.s)).forEach(({ev,st})=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span class="d mono">${st.label}</span><span><b>${ev.title}</b> · ${fmt(parse(ev.s))}–${fmt(parse(ev.e))} ${ev.place}</span>`;
+      list.appendChild(li);
+    });
+  }
+})();
+
+(function(){
+  const up=visible.map(ev=>({ev,st:status(ev)})).filter(x=>x.st.k==='soon'||x.st.k==='future')
+    .sort((a,b)=>parse(a.ev.s)-parse(b.ev.s)).slice(0,4);
+  const radar=$('#radar');
+  up.forEach(({ev,st})=>{
+    const c=document.createElement('div'); c.className='radar-card';
+    c.innerHTML=`<div class="dd mono">${st.label} · ${CATS[ev.cat].label}</div>
+      <div class="t">${ev.title}</div>
+      <div class="m">${fmt(parse(ev.s))}–${fmt(parse(ev.e))} · ${ev.place}</div>`;
+    radar.appendChild(c);
+  });
+})();
+
+(function(){
+  const f=$('#filters');
+  const mk=(key,label,dot)=>{
+    const b=document.createElement('button'); b.className='chip'+(key==='all'?' on':''); b.dataset.cat=key;
+    b.innerHTML=(dot?'<span class="dot"></span>':'')+label;
+    b.addEventListener('click',()=>{
+      f.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===key));
+      document.querySelectorAll('.ev').forEach(el=>el.classList.toggle('hidden',key!=='all'&&el.dataset.cat!==key));
+      document.querySelectorAll('.month').forEach(m=>{
+        const any=[...m.querySelectorAll('.ev')].some(el=>!el.classList.contains('hidden'));
+        m.style.display=(key==='all'||any)?'':'none';
+      });
+    });
+    f.appendChild(b);
+  };
+  mk('all','All',false);
+  Object.entries(CATS).forEach(([k,v])=>mk(k,v.label,true));
+})();
+
+(function(){
+  const byMonth={};
+  const winStartKey=`${winStart.getFullYear()}-${String(winStart.getMonth()+1).padStart(2,'0')}`;
+  visible.forEach(ev=>{
+    let key=ev.s.slice(0,7);
+    if(key<winStartKey) key=winStartKey;
+    (byMonth[key]=byMonth[key]||[]).push(ev);
+  });
+  const root=$('#months');
+  const allKeys=[];
+  for(let d=new Date(winStart); d<=winEnd; d=new Date(d.getFullYear(), d.getMonth()+1, 1)){
+    allKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+  }
+  allKeys.forEach(key=>{
+    const [y,m]=key.split('-').map(Number);
+    const meta=MONTH_THEMES[key]||{theme:''};
+    const sec=document.createElement('section'); sec.className='month';
+    sec.innerHTML=`<div class="month-head">
+        <div class="month-num serif">${String(m).padStart(2,'0')}</div>
+        <div class="month-meta">
+          <div class="y mono">${MONTH_NAMES[m-1]} ${y}</div>
+          <div class="theme">${meta.super?'<span class="super">◆ </span>':''}${meta.theme||''}</div>
+        </div>
+        ${meta.note?`<div class="month-note">${meta.note}</div>`:''}
+      </div>
+      <div class="events"></div>`;
+    const grid=sec.querySelector('.events');
+    const evs=byMonth[key]||[];
+    if(evs.length===0){
+      grid.innerHTML='<div class="empty-month">No major events scheduled — a window to prepare the next season.</div>';
+    }
+    evs.sort((a,b)=>parse(a.s)-parse(b.s)).forEach(ev=>{
+      const st=status(ev);
+      const card=document.createElement('article');
+      card.className='ev'+(st.k==='past'?' past':'');
+      card.dataset.cat=ev.cat;
+      const dday= st.k==='past' ? `<span class="ev-dday">Ended</span>`
+        : st.k==='live' ? `<span class="ev-dday live">● LIVE</span>`
+        : `<span class="ev-dday ${st.k==='soon'?'soon':''} mono">${st.label}</span>`;
+      const sd=parse(ev.s), ed=parse(ev.e);
+      const range = ev.s===ev.e ? fmt(sd) : `${fmt(sd)} – ${fmt(ed)}`;
+      card.innerHTML=`
+        <div class="ev-top"><span class="ev-cat">${CATS[ev.cat].label}</span>${dday}</div>
+        <h3>${ev.title}</h3>
+        <div class="when"><b class="mono">${range}</b> · ${ev.place}${ev.approx?'<span class="approx">± expected</span>':''}</div>
+        <div class="angles">
+          <div class="angle"><b>MARKETING</b>${ev.angle}</div>
+          ${ev.prep&&ev.prep!=='—'?`<div class="angle prep"><b>PREP</b>${ev.prep}</div>`:''}
+        </div>`;
+      grid.appendChild(card);
+    });
+    root.appendChild(sec);
+  });
+})();
+</script>
+</body>
+</html>
