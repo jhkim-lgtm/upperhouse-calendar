@@ -43,6 +43,10 @@
   .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
 
   header{padding:52px 0 30px; border-bottom:1px solid var(--ink)}
+  .byline{display:flex; align-items:center; gap:10px; margin-bottom:26px}
+  .byline .cap{font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--sub)}
+  .byline img{height:15px; width:auto; display:block; filter:invert(1)}
+  @media (prefers-color-scheme: dark){.byline img{filter:none}}
   .eyebrow{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap;
     font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--sub); margin-bottom:16px}
   .eyebrow b{color:var(--point); font-weight:700}
@@ -122,6 +126,7 @@
 <body>
 <div class="wrap">
   <header>
+    <div class="byline"><span class="cap">Calendar by</span><img src="https://jhkim-lgtm.github.io/industry-calendars/logo-1club.png" alt="1%CLUB"></div>
     <div class="eyebrow">
       <span><b>THE UPPER HOUSE</b>&nbsp; HOSPITALITY INTELLIGENCE</span>
       <span id="today-label" class="mono"></span>
