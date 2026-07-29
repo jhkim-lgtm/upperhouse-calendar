@@ -363,6 +363,14 @@ const MONTH_THEMES = {
   '2027-12':{theme:'WinterFest — Peak Season', super:true},
 };
 
+
+/* ── 내 일정: 이 브라우저(localStorage)에만 저장되는 개인 일정 ── */
+CATS.custom={label:'My Events', color:'var(--point)'};
+const CUSTOM_KEY='onecal_custom_'+location.pathname;
+let CUSTOM=[];
+try{CUSTOM=JSON.parse(localStorage.getItem(CUSTOM_KEY)||'[]')}catch(e){CUSTOM=[]}
+CUSTOM.forEach(c=>{if(c&&c.s&&c.title)EVENTS.push({s:c.s,e:c.e||c.s,cat:'custom',title:c.title,place:c.place||'',angle:c.memo||'Added by you',prep:'—',sales:'—'});});
+
 const $=s=>document.querySelector(s);
 const fmt=(d)=>`${d.getMonth()+1}/${d.getDate()}`;
 const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c);};
@@ -491,6 +499,74 @@ function status(ev){
     root.appendChild(sec);
   });
 })();
+
+/* ── 내 일정 추가 UI ── */
+(function(){
+  const A=`var(--acc, var(--point, var(--gold, var(--bronze))))`;
+  const st=document.createElement('style');
+  st.textContent=`
+  .addev-fab{position:fixed;right:20px;bottom:20px;z-index:50;border:none;border-radius:999px;padding:12px 18px;font-size:13.5px;font-weight:700;font-family:inherit;color:#fff;background:${A};box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer}
+  .addev-ov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px}
+  .addev-ov.open{display:flex}
+  .addev-md{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;max-width:430px;width:100%;max-height:85vh;overflow:auto;padding:22px}
+  .addev-md h3{margin:0 0 4px;font-size:17px}
+  .addev-md .hint{font-size:12px;color:var(--sub);margin:0 0 14px}
+  .addev-md label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);margin:10px 0 4px;letter-spacing:.06em}
+  .addev-md input,.addev-md textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);padding:8px 10px;font-size:14px;font-family:inherit}
+  .addev-row{display:flex;gap:10px}.addev-row>div{flex:1}
+  .addev-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+  .addev-actions button{border-radius:4px;padding:8px 16px;font-size:13.5px;font-family:inherit;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--sub)}
+  .addev-actions .pri{background:${A};border-color:transparent;color:#fff;font-weight:700}
+  .addev-list{margin:0 0 6px;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+  .addev-list li{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:13px;border:1px solid var(--line-soft);border-radius:4px;padding:6px 10px}
+  .addev-list .del{border:none;background:none;color:var(--sub);cursor:pointer;font-size:12px;text-decoration:underline;font-family:inherit}`;
+  document.head.appendChild(st);
+
+  const ov=document.createElement('div'); ov.className='addev-ov';
+  ov.innerHTML=`<div class="addev-md" role="dialog" aria-modal="true">
+    <h3>My events</h3>
+    <p class="hint">Saved only in this browser (this device). Shown in the calendar with a D-day.</p>
+    <ul class="addev-list" id="addev-list"></ul>
+    <label>Title *</label><input id="ae-title" type="text" maxlength="60">
+    <div class="addev-row">
+      <div><label>Start *</label><input id="ae-s" type="date"></div>
+      <div><label>End (optional)</label><input id="ae-e" type="date"></div>
+    </div>
+    <label>Place (optional)</label><input id="ae-place" type="text" maxlength="40">
+    <label>Note (optional)</label><textarea id="ae-memo" rows="2" maxlength="140"></textarea>
+    <div class="addev-actions">
+      <button type="button" id="ae-close">Close</button>
+      <button type="button" class="pri" id="ae-save">Save</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+
+  const btn=document.createElement('button'); btn.className='addev-fab'; btn.type='button'; btn.textContent='＋ Add my event';
+  document.body.appendChild(btn);
+
+  function renderList(){
+    const ul=ov.querySelector('#addev-list'); ul.innerHTML='';
+    CUSTOM.forEach((c,i)=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span><b>${c.title}</b> · ${c.s}${c.e&&c.e!==c.s?'–'+c.e:''}</span>`;
+      const del=document.createElement('button'); del.className='del'; del.textContent='Delete';
+      del.addEventListener('click',()=>{CUSTOM.splice(i,1);localStorage.setItem(CUSTOM_KEY,JSON.stringify(CUSTOM));location.reload();});
+      li.appendChild(del); ul.appendChild(li);
+    });
+  }
+  btn.addEventListener('click',()=>{renderList();ov.classList.add('open');});
+  ov.querySelector('#ae-close').addEventListener('click',()=>ov.classList.remove('open'));
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+  ov.querySelector('#ae-save').addEventListener('click',()=>{
+    const t=ov.querySelector('#ae-title').value.trim(), s=ov.querySelector('#ae-s').value;
+    if(!t||!s){alert('Please enter a title and start date.');return;}
+    const e=ov.querySelector('#ae-e').value;
+    CUSTOM.push({title:t,s:s,e:(e&&e>=s)?e:s,place:ov.querySelector('#ae-place').value.trim(),memo:ov.querySelector('#ae-memo').value.trim()});
+    localStorage.setItem(CUSTOM_KEY,JSON.stringify(CUSTOM));
+    location.reload();
+  });
+})();
+
 </script>
 </body>
 </html>
